@@ -8,5 +8,5 @@ Additionally has some helper conversion functions to convert Soft Ptrs to Soft P
 
 ##### Tested Versions:
 
-4.17, 4.18 and 4.19.
+4.17 - 4.20
 

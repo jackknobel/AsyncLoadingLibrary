@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Engine/LatentActionManager.h"
 #include "Engine/StreamableManager.h"
 #include "AsyncLoadingLibrary.generated.h"
 
@@ -24,6 +25,16 @@ public:
 	inline const FSoftObjectPath& GetPath() const { return ObjectPath; }
 
 	inline const UObject* GetObject() const { return ObjectPath.ResolveObject(); }
+
+	bool operator==(const FBundleAsset& other) const
+	{
+		return ObjectPath == other.ObjectPath;
+	}
+
+	bool operator==(const FSoftObjectPath& other) const
+	{
+		return ObjectPath == other;
+	}
 };
 
 using FAssetBundle = TArray<FBundleAsset>;
@@ -36,7 +47,6 @@ struct FAsyncLoadBundle
 	// A callback function for the loading of the bundle
 	FStreamableDelegate CallbackDelegate;
 
-	template<typename TAsset>
 	FAsyncLoadBundle(const FAssetBundle& objectsToLoad, const FStreamableDelegate& loadCompleteCallback = FStreamableDelegate())
 		: ObjectBundle(objectsToLoad), CallbackDelegate(loadCompleteCallback)
 	{}
@@ -47,7 +57,11 @@ struct FAsyncLoadBundle
 		ObjectBundle.Emplace(asset.ToSoftObjectPath());
 	}
 
-	template<typename TAsset>
+	inline bool AddAssetToLoad(const FSoftObjectPath& asset)
+	{
+		ObjectBundle.Emplace(asset);
+	}
+
 	inline bool AddAssetsToLoad(const FAssetBundle& assets)
 	{
 		ObjectBundle.Append(assets);

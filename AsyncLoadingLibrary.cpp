@@ -5,7 +5,8 @@
 // UE Includes
 #include "Engine/AssetManager.h"
 #include "LatentActions.h"
-#include "Delegates/Delegate.h"
+#include "Engine/World.h"
+#include "Engine/Engine.h"
 
 DEFINE_LOG_CATEGORY_STATIC(AsyncLoadLibrary, Log, All)
 
@@ -15,7 +16,7 @@ void FAsyncLoadBundle::TriggerLoad(TAsyncLoadPriority loadPriority /* = 50 */, c
 	TArray<FSoftObjectPath> objectsRequiringLoad;
 	objectsRequiringLoad.Reserve(ObjectBundle.Num());
 
-	for (const FBundleAsset& asset : ObjectBundle)
+	for (const auto& asset : ObjectBundle)
 	{
 		if (asset.GetObject() == nullptr)
 		{
